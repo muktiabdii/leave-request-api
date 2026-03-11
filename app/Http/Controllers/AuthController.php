@@ -11,7 +11,8 @@ class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService
-    ) {}
+    ) {
+    }
 
     public function register(RegisterRequest $request)
     {
@@ -43,5 +44,30 @@ class AuthController extends Controller
             'token' => $result['token'],
             'token_type' => 'Bearer'
         ], 'User logged in successfully');
+    }
+
+    public function redirectToGoogle()
+    {
+        return $this->authService->redirectToGoogle();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $result = $this->authService->handleGoogleCallback();
+
+        if (!$result) {
+            return ApiResponse::error('Google authentication failed', 401);
+        }
+
+        return ApiResponse::success([
+            'user' => [
+                'id' => $result['user']->id,
+                'name' => $result['user']->name,
+                'email' => $result['user']->email,
+                'role' => $result['user']->role,
+            ],
+            'token' => $result['token'],
+            'token_type' => 'Bearer'
+        ], 'User logged in with Google successfully');
     }
 }
