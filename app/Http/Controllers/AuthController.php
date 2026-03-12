@@ -60,4 +60,14 @@ class AuthController extends Controller
             'token_type' => 'Bearer'
         ], 'User logged in with Google successfully');
     }
+
+    public function logout()
+    {
+        $this->authService->logout();
+
+        return ApiResponse::success(
+            null,
+            'User logged out successfully'
+        );
+    }
 }

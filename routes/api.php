@@ -11,3 +11,9 @@ Route::prefix('auth')->group(function () {
         Route::get('/callback', [AuthController::class, 'handleGoogleCallback']);
     });
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
+});
