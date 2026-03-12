@@ -38,15 +38,6 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'email.required' => 'Email is required',
-            'email.email' => 'Email format is invalid',
-            'password.required' => 'Password is required'
-        ];
-    }
-
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(

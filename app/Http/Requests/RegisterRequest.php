@@ -54,15 +54,6 @@ class RegisterRequest extends FormRequest
             ]
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'email.unique' => 'Email already registered',
-            'password.confirmed' => 'Password confirmation does not match',
-            'role.in' => 'Invalid role value'
-        ];
-    }
     
     protected function failedValidation(Validator $validator)
     {

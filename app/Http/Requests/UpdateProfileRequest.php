@@ -30,14 +30,12 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => [
                 'sometimes',
-                'required',
                 'string',
                 'max:255'
             ],
 
             'email' => [
                 'sometimes',
-                'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($this->user()->id),
             ],
@@ -48,14 +46,6 @@ class UpdateProfileRequest extends FormRequest
                 'confirmed',
                 Password::min(8)->letters()->numbers()
             ]
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'email.unique' => 'Email already registered',
-            'password.confirmed' => 'Password confirmation does not match',
         ];
     }
 
