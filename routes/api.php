@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LeaveRequestController;
 
+// auth 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
@@ -14,9 +16,20 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    // auth 
     Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
     });
+
+    // user
     Route::get('/me', [UserController::class, 'me']);
     Route::patch('/me', [UserController::class, 'updateProfile']);
+});
+
+// leave request
+Route::middleware(['auth:sanctum', 'role:employee'])->group(function () {
+    Route::prefix('leave-requests')->group(function () {
+        Route::post('/', [LeaveRequestController::class, 'store']);
+    });
 });
