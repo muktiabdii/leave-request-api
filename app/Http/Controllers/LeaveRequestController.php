@@ -6,6 +6,7 @@ use App\Helper\ApiResponse;
 use App\Services\LeaveRequestService;
 use App\Http\Resources\LeaveRequestResource;
 use App\Http\Requests\CreateLeaveRequest;
+use App\Http\Requests\UpdateLeaveRequest;
 
 class LeaveRequestController extends Controller
 {
@@ -58,7 +59,7 @@ class LeaveRequestController extends Controller
                 200,
                 $meta
             );
-            
+
         } catch (\Exception $e) {
 
             return ApiResponse::error(
@@ -84,6 +85,50 @@ class LeaveRequestController extends Controller
             return ApiResponse::error(
                 $e->getMessage(),
                 404
+            );
+        }
+    }
+
+    public function cancel($id)
+    {
+        try {
+
+            $leaveRequest = $this->leaveRequestService->cancelLeaveRequest($id);
+
+            return ApiResponse::success(
+                new LeaveRequestResource($leaveRequest),
+                'Leave request cancelled successfully'
+            );
+
+        } catch (\Exception $e) {
+
+            return ApiResponse::error(
+                $e->getMessage(),
+                400
+            );
+        }
+    }
+
+    public function update($id, UpdateLeaveRequest $request)
+    {
+        try {
+
+            $leaveRequest = $this->leaveRequestService->updateLeaveRequest(
+                $id,
+                $request->validated(),
+                $request->file('attachment')
+            );
+
+            return ApiResponse::success(
+                new LeaveRequestResource($leaveRequest),
+                'Leave request updated successfully'
+            );
+
+        } catch (\Exception $e) {
+
+            return ApiResponse::error(
+                $e->getMessage(),
+                400
             );
         }
     }

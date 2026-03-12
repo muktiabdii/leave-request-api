@@ -33,5 +33,7 @@ Route::middleware(['auth:sanctum', 'role:employee'])->group(function () {
         Route::post('/', [LeaveRequestController::class, 'store']);
         Route::get('/', [LeaveRequestController::class, 'index']);
         Route::get('/{id}', [LeaveRequestController::class, 'show']);
+        Route::patch('/{id}', [LeaveRequestController::class, 'update']);
+        Route::patch('/{id}/cancel', [LeaveRequestController::class, 'cancel']);
     });
 });
