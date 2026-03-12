@@ -6,7 +6,7 @@ use App\Helper\ApiResponse;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\AuthResource;
 
 class AuthController extends Controller
 {
@@ -20,7 +20,7 @@ class AuthController extends Controller
         $user = $this->authService->register($request->validated());
 
         return ApiResponse::success(
-            new UserResource($user),
+            new AuthResource($user),
             'User registered successfully',
             201
         );
@@ -35,7 +35,7 @@ class AuthController extends Controller
         }
 
         return ApiResponse::success([
-            'user' => new UserResource($result->user),
+            'user' => new AuthResource($result->user),
             'token' => $result->token,
             'token_type' => 'Bearer'
         ], 'User logged in successfully');
@@ -55,7 +55,7 @@ class AuthController extends Controller
         }
 
         return ApiResponse::success([
-            'user' => new UserResource($result->user),
+            'user' => new AuthResource($result->user),
             'token' => $result->token,
             'token_type' => 'Bearer'
         ], 'User logged in with Google successfully');
