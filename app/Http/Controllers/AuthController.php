@@ -6,6 +6,7 @@ use App\Helper\ApiResponse;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -18,12 +19,11 @@ class AuthController extends Controller
     {
         $user = $this->authService->register($request->validated());
 
-        return ApiResponse::success([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-        ], 'User registered successfully', 201);
+        return ApiResponse::success(
+            new UserResource($user),
+            'User registered successfully',
+            201
+        );
     }
 
     public function login(LoginRequest $request)
@@ -35,13 +35,8 @@ class AuthController extends Controller
         }
 
         return ApiResponse::success([
-            'user' => [
-                'id' => $result['user']->id,
-                'name' => $result['user']->name,
-                'email' => $result['user']->email,
-                'role' => $result['user']->role,
-            ],
-            'token' => $result['token'],
+            'user' => new UserResource($result->user),
+            'token' => $result->token,
             'token_type' => 'Bearer'
         ], 'User logged in successfully');
     }
@@ -60,13 +55,8 @@ class AuthController extends Controller
         }
 
         return ApiResponse::success([
-            'user' => [
-                'id' => $result['user']->id,
-                'name' => $result['user']->name,
-                'email' => $result['user']->email,
-                'role' => $result['user']->role,
-            ],
-            'token' => $result['token'],
+            'user' => new UserResource($result->user),
+            'token' => $result->token,
             'token_type' => 'Bearer'
         ], 'User logged in with Google successfully');
     }

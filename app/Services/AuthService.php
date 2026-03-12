@@ -28,7 +28,7 @@ class AuthService
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
+        return (object)[
             'user' => $user,
             'token' => $token
         ];
@@ -64,7 +64,7 @@ class AuthService
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
+        return (object)[
             'user' => $user,
             'token' => $token
         ];
