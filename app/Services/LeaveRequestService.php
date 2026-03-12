@@ -56,4 +56,28 @@ class LeaveRequestService
 
         return $leaveRequest;
     }
+
+    public function getMyLeaveRequests()
+    {
+        $user = Auth::user();
+
+        return LeaveRequest::where('employee_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+    }
+
+    public function getLeaveRequestById($id)
+    {
+        $user = Auth::user();
+
+        $leaveRequest = LeaveRequest::where('employee_id', $user->id)
+            ->where('id', $id)
+            ->first();
+
+        if (!$leaveRequest) {
+            throw new \Exception('Leave request not found');
+        }
+
+        return $leaveRequest;
+    }
 }

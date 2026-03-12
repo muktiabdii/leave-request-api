@@ -20,7 +20,7 @@ class LeaveRequestController extends Controller
 
             $leaveRequest = $this->leaveRequestService->createLeaveRequest(
                 $request->validated(),
-                $request->file('attachment') 
+                $request->file('attachment')
             );
 
             return ApiResponse::success(
@@ -33,6 +33,57 @@ class LeaveRequestController extends Controller
             return ApiResponse::error(
                 $e->getMessage(),
                 400
+            );
+        }
+    }
+
+    public function index()
+    {
+        try {
+
+            $leaveRequests = $this->leaveRequestService->getMyLeaveRequests();
+
+            $meta = [
+                'page' => $leaveRequests->currentPage(),
+                'limit' => $leaveRequests->perPage(),
+                'total' => $leaveRequests->total(),
+                'total_pages' => $leaveRequests->lastPage(),
+                'has_next' => $leaveRequests->hasMorePages(),
+                'has_prev' => $leaveRequests->currentPage() > 1
+            ];
+
+            return ApiResponse::success(
+                LeaveRequestResource::collection($leaveRequests),
+                'Leave requests retrieved successfully',
+                200,
+                $meta
+            );
+            
+        } catch (\Exception $e) {
+
+            return ApiResponse::error(
+                $e->getMessage(),
+                400
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+
+            $leaveRequest = $this->leaveRequestService->getLeaveRequestById($id);
+
+            return ApiResponse::success(
+                new LeaveRequestResource($leaveRequest),
+                'Leave request retrieved successfully'
+            );
+
+        } catch (\Exception $e) {
+
+            return ApiResponse::error(
+                $e->getMessage(),
+                404
             );
         }
     }

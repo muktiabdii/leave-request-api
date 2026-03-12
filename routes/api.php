@@ -31,5 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'role:employee'])->group(function () {
     Route::prefix('leave-requests')->group(function () {
         Route::post('/', [LeaveRequestController::class, 'store']);
+        Route::get('/', [LeaveRequestController::class, 'index']);
+        Route::get('/{id}', [LeaveRequestController::class, 'show']);
     });
 });
