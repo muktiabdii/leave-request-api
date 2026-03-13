@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Helper\ApiResponse;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class ApproveLeaveRequest extends FormRequest
 {
@@ -37,7 +38,17 @@ class ApproveLeaveRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    public function messages(): array
+    {
+        return [
+            'status.required' => 'Status is required.',
+            'status.in' => 'Status must be either approved or rejected.',
+            'admin_note.string' => 'Admin note must be a string.',
+            'admin_note.max' => 'Admin note cannot exceed 500 characters.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
             ApiResponse::error(

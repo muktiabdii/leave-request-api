@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helper\ApiResponse;
 use App\Services\LeaveRequestService;
-use App\Http\Resources\LeaveRequestResource;
+use App\Http\Resources\AdminLeaveRequestResource;
 use App\Http\Requests\ApproveLeaveRequest;
 use App\Http\Requests\CreateLeaveRequest;
 use App\Http\Requests\UpdateLeaveRequest;
+use App\Http\Resources\LeaveRequestResource;
 
 class LeaveRequestController extends Controller
 {
@@ -152,7 +153,7 @@ class LeaveRequestController extends Controller
             ];
 
             return ApiResponse::success(
-                LeaveRequestResource::collection($leaveRequests),
+                AdminLeaveRequestResource::collection($leaveRequests),
                 'Leave requests retrieved successfully',
                 200,
                 $meta
@@ -171,7 +172,7 @@ class LeaveRequestController extends Controller
             $leaveRequest = $this->leaveRequestService->getLeaveRequestForAdmin($id);
 
             return ApiResponse::success(
-                new LeaveRequestResource($leaveRequest),
+                new AdminLeaveRequestResource($leaveRequest),
                 'Leave request retrieved successfully'
             );
         } catch (\Exception $e) {
