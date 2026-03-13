@@ -26,8 +26,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // user
-        Route::get('/me', [UserController::class, 'me']);
-        Route::patch('/me', [UserController::class, 'updateProfile']);
+        Route::get('/profile', [UserController::class, 'profile']);
+        Route::patch('/profile', [UserController::class, 'updateProfile']);
     });
 
     // leave request
@@ -44,8 +44,8 @@ Route::prefix('v1')->group(function () {
     // admin leave request
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::prefix('admin/leave-requests')->group(function () {
-            Route::get('/', [LeaveRequestController::class, 'indexAdmin']);
-            Route::get('/{id}', [LeaveRequestController::class, 'showAdmin']);
+            Route::get('/', [LeaveRequestController::class, 'adminIndex']);
+            Route::get('/{id}', [LeaveRequestController::class, 'adminShow']);
             Route::patch('/{id}/approve', [LeaveRequestController::class, 'approve']);
         });
     });

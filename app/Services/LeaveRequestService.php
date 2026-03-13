@@ -167,7 +167,7 @@ class LeaveRequestService
         return $leaveRequest;
     }
 
-    public function getAllLeaveRequests(array $filters = [])
+    public function getLeaveRequestsForAdmin(array $filters = [])
     {
         $query = LeaveRequest::with('employee')
             ->whereHas('employee', function ($query) {
@@ -196,7 +196,7 @@ class LeaveRequestService
         return $query->orderBy($sortBy, $order)->paginate(10);
     }
 
-    public function getLeaveRequestByIdForAdmin($id)
+    public function getLeaveRequestForAdmin($id)
     {
         $leaveRequest = LeaveRequest::with('employee')
             ->whereHas('employee', function ($query) {

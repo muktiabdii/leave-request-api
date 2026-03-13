@@ -14,7 +14,7 @@ class UserController extends Controller
     ) {
     }
 
-    public function me()
+    public function profile()
     {
         $user = $this->userService->getCurrentUser();
 

@@ -135,12 +135,12 @@ class LeaveRequestController extends Controller
         }
     }
 
-    public function indexAdmin(Request $request)
+    public function adminIndex(Request $request)
     {
         try {
             $filters = $request->only(['status', 'employee_id', 'start_date', 'end_date', 'sort', 'order']);
 
-            $leaveRequests = $this->leaveRequestService->getAllLeaveRequests($filters);
+            $leaveRequests = $this->leaveRequestService->getLeaveRequestsForAdmin($filters);
 
             $meta = [
                 'page' => $leaveRequests->currentPage(),
@@ -165,10 +165,10 @@ class LeaveRequestController extends Controller
         }
     }
 
-    public function showAdmin($id)
+    public function adminShow($id)
     {
         try {
-            $leaveRequest = $this->leaveRequestService->getLeaveRequestByIdForAdmin($id);
+            $leaveRequest = $this->leaveRequestService->getLeaveRequestForAdmin($id);
 
             return ApiResponse::success(
                 new LeaveRequestResource($leaveRequest),
