@@ -6,8 +6,8 @@ Leave Request API adalah aplikasi berbasis Laravel yang menyediakan sistem manaj
 
 ## Actors 👥
 
-- **Employee** 🧑‍💼: Karyawan yang dapat mendaftar, login, mengelola profil, mengajukan permintaan cuti, melihat status permintaan, dan membatalkan permintaan.
-- **Admin** 👨‍💼: Administrator yang dapat melihat semua permintaan cuti, menyetujui atau menolak permintaan, dan memberikan catatan admin.
+- **Employee** 🧑‍💼: Karyawan yang mengajukan permintaan cuti, melihat status permintaan, dan membatalkan permintaan.
+- **Admin** 👨‍💼: Administrator yang dapat melihat semua permintaan cuti, menyetujui atau menolak permintaan, dan memberikan catatan.
 
 ## Link ERD 🔗
 
@@ -19,7 +19,7 @@ Leave Request API adalah aplikasi berbasis Laravel yang menyediakan sistem manaj
 - Registrasi akun baru dengan email dan password
 - Login dengan email/password atau Google OAuth
 - Logout
-- Pengelolaan profil (update nama, dll.)
+- Pengelolaan profil
 
 ### Leave Request Management (Employee) 📝
 - Mengajukan permintaan cuti dengan tanggal mulai, akhir, alasan, dan lampiran
@@ -41,14 +41,14 @@ Leave Request API adalah aplikasi berbasis Laravel yang menyediakan sistem manaj
 
 ## API Design 🔌
 
-API menggunakan versioning v1 dan autentikasi via Laravel Sanctum.
+API menggunakan versioning v1.
 
 ### Authentication Endpoints 🔑
 - `POST /api/v1/auth/register` - Registrasi
 - `POST /api/v1/auth/login` - Login
 - `GET /api/v1/auth/google/redirect` - Redirect ke Google OAuth
 - `GET /api/v1/auth/google/callback` - Callback Google OAuth
-- `POST /api/v1/auth/logout` - Logout (authenticated)
+- `POST /api/v1/auth/logout` - Logout
 
 ### User Endpoints (Authenticated) 👤
 - `GET /api/v1/profile` - Get profile
@@ -77,9 +77,7 @@ API menggunakan versioning v1 dan autentikasi via Laravel Sanctum.
 - **Authentication**: Laravel Sanctum
 - **OAuth**: Laravel Socialite (Google)
 - **File Storage**: Cloudinary
-- **Testing**: PHPUnit
 - **Code Quality**: Laravel Pint
-- **Development**: Laravel Sail (Docker)
 
 ## Architecture Pattern 🏗️
 
@@ -151,7 +149,7 @@ Variabel environment yang diperlukan:
 
 1. **Clone repository** 📥:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/muktiabdii/leave-request-api
    cd leave_request_api
    ```
 
