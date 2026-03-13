@@ -1,59 +1,193 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Leave Request API 📅
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview 🌟
 
-## About Laravel
+Leave Request API adalah aplikasi berbasis Laravel yang menyediakan sistem manajemen permintaan cuti untuk perusahaan. Aplikasi ini memungkinkan karyawan untuk mengajukan permintaan cuti, melampirkan dokumen pendukung, dan admin untuk menyetujui atau menolak permintaan tersebut. Sistem ini juga mendukung autentikasi melalui email/password atau Google OAuth.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Actors 👥
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Employee** 🧑‍💼: Karyawan yang dapat mendaftar, login, mengelola profil, mengajukan permintaan cuti, melihat status permintaan, dan membatalkan permintaan.
+- **Admin** 👨‍💼: Administrator yang dapat melihat semua permintaan cuti, menyetujui atau menolak permintaan, dan memberikan catatan admin.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Link ERD 🔗
 
-## Learning Laravel
+[Entity Relationship Diagram](https://drive.google.com/file/d/129e1A08ihoBM0lUUdDxRcEi6hzmJlmaP/view?usp=sharing)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Functional Requirements 📋
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Authentication 🔐
+- Registrasi akun baru dengan email dan password
+- Login dengan email/password atau Google OAuth
+- Logout
+- Pengelolaan profil (update nama, dll.)
 
-## Laravel Sponsors
+### Leave Request Management (Employee) 📝
+- Mengajukan permintaan cuti dengan tanggal mulai, akhir, alasan, dan lampiran
+- Melihat daftar permintaan cuti sendiri
+- Melihat detail permintaan cuti
+- Update permintaan cuti (jika masih pending)
+- Membatalkan permintaan cuti
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Admin Management 👑
+- Melihat semua permintaan cuti dari karyawan
+- Melihat detail permintaan cuti
+- Menyetujui permintaan cuti
+- Menolak permintaan cuti dengan catatan
 
-### Premium Partners
+### Additional Features ✨
+- Upload lampiran menggunakan Cloudinary
+- Kuota cuti per karyawan (default 12 hari)
+- Status permintaan: pending, approved, rejected, cancelled
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## API Design 🔌
 
-## Contributing
+API menggunakan versioning v1 dan autentikasi via Laravel Sanctum.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Authentication Endpoints 🔑
+- `POST /api/v1/auth/register` - Registrasi
+- `POST /api/v1/auth/login` - Login
+- `GET /api/v1/auth/google/redirect` - Redirect ke Google OAuth
+- `GET /api/v1/auth/google/callback` - Callback Google OAuth
+- `POST /api/v1/auth/logout` - Logout (authenticated)
 
-## Code of Conduct
+### User Endpoints (Authenticated) 👤
+- `GET /api/v1/profile` - Get profile
+- `PATCH /api/v1/profile` - Update profile
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Leave Request Endpoints (Employee) 📅
+- `POST /api/v1/leave-requests` - Create leave request
+- `GET /api/v1/leave-requests` - List own leave requests
+- `GET /api/v1/leave-requests/{id}` - Get leave request detail
+- `PATCH /api/v1/leave-requests/{id}` - Update leave request
+- `PATCH /api/v1/leave-requests/{id}/cancel` - Cancel leave request
 
-## Security Vulnerabilities
+### Admin Leave Request Endpoints (Admin) 👑
+- `GET /api/v1/admin/leave-requests` - List all leave requests
+- `GET /api/v1/admin/leave-requests/{id}` - Get leave request detail
+- `PATCH /api/v1/admin/leave-requests/{id}/approve` - Approve leave request
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Link Dokumentasi Postman 📖
 
-## License
+[Dokumentasi Postman](https://documenter.getpostman.com/view/41537989/2sBXigLD9h)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Tech Stack 🛠️
+
+- **Backend**: PHP 8.2+, Laravel 12
+- **Database**: MySQL / SQLite
+- **Authentication**: Laravel Sanctum
+- **OAuth**: Laravel Socialite (Google)
+- **File Storage**: Cloudinary
+- **Testing**: PHPUnit
+- **Code Quality**: Laravel Pint
+- **Development**: Laravel Sail (Docker)
+
+## Architecture Pattern 🏗️
+
+Aplikasi menggunakan pola arsitektur **MVC (Model-View-Controller)** dengan lapisan **Service** untuk logika bisnis.
+
+- **Models**: User, LeaveRequest
+- **Controllers**: AuthController, UserController, LeaveRequestController
+- **Services**: AuthService, UserService, LeaveRequestService
+- **Middleware**: Authentication, Role-based access
+- **Resources**: API Resources untuk response formatting
+
+## Folder Structure 📁
+
+```
+leave_request_api/
+├── app/
+│   ├── Helper/
+│   │   └── ApiResponse.php
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   ├── Middleware/
+│   │   ├── Requests/
+│   │   └── Resources/
+│   ├── Models/
+│   │   ├── LeaveRequest.php
+│   │   └── User.php
+│   ├── Providers/
+│   │   └── AppServiceProvider.php
+│   └── Services/
+│       ├── AuthService.php
+│       ├── LeaveRequestService.php
+│       └── UserService.php
+├── bootstrap/
+├── config/
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+├── resources/
+├── routes/
+│   ├── api.php
+│   └── web.php
+├── storage/
+├── tests/
+└── vendor/
+```
+
+## Env ⚙️
+
+Variabel environment yang diperlukan:
+
+- `APP_NAME`: Nama aplikasi
+- `APP_ENV`: Environment (local, production)
+- `APP_KEY`: Application key
+- `APP_DEBUG`: Debug mode
+- `APP_URL`: Base URL
+- `DB_CONNECTION`: Database connection (mysql, sqlite)
+- `DB_HOST`: Database host
+- `DB_PORT`: Database port
+- `DB_DATABASE`: Database name
+- `DB_USERNAME`: Database username
+- `DB_PASSWORD`: Database password
+- `CLOUDINARY_URL`: Cloudinary configuration
+- `GOOGLE_CLIENT_ID`: Google OAuth client ID
+- `GOOGLE_CLIENT_SECRET`: Google OAuth client secret
+
+## Installation Setup 🚀
+
+1. **Clone repository** 📥:
+   ```bash
+   git clone <repository-url>
+   cd leave_request_api
+   ```
+
+2. **Install dependencies** 📦:
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Environment setup** 🔧:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Database setup** 🗄️:
+   ```bash
+   php artisan migrate
+   ```
+
+5. **Build assets** 🏗️:
+   ```bash
+   npm run build
+   ```
+
+6. **Run application** ▶️:
+   ```bash
+   php artisan serve
+   ```
+
+   Atau menggunakan script dev:
+   ```bash
+   composer run dev
+   ```
+
+## Author 👤
+
+**Mukti Abdi Syukur**
+* *Backend Developer (Internship Applicant)* 👨‍💻
