@@ -37,3 +37,12 @@ Route::middleware(['auth:sanctum', 'role:employee'])->group(function () {
         Route::patch('/{id}/cancel', [LeaveRequestController::class, 'cancel']);
     });
 });
+
+// admin leave request
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::prefix('admin/leave-requests')->group(function () {
+        Route::get('/', [LeaveRequestController::class, 'indexAdmin']);
+        Route::get('/{id}', [LeaveRequestController::class, 'showAdmin']);
+        Route::patch('/{id}/approve', [LeaveRequestController::class, 'approve']);
+    });
+});

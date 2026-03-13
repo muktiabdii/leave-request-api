@@ -166,4 +166,69 @@ class LeaveRequestService
 
         return $leaveRequest;
     }
+
+    public function getAllLeaveRequests()
+    {
+        return LeaveRequest::with('employee')
+            ->whereHas('employee', function ($query) {
+                $query->where('role', 'employee');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+    }
+
+    public function getLeaveRequestByIdForAdmin($id)
+    {
+        $leaveRequest = LeaveRequest::with('employee')
+            ->whereHas('employee', function ($query) {
+                $query->where('role', 'employee');
+            })
+            ->where('id', $id)
+            ->first();
+
+        if (!$leaveRequest) {
+            throw new \Exception('Leave request not found');
+        }
+
+        return $leaveRequest;
+    }
+
+    public function approveLeaveRequest($id, array $data)
+    {
+        $admin = Auth::user();
+
+        $leaveRequest = LeaveRequest::with('employee')
+            ->whereHas('employee', function ($query) {
+                $query->where('role', 'employee');
+            })
+            ->where('id', $id)
+            ->first();
+
+        if (!$leaveRequest) {
+            throw new \Exception('Leave request not found');
+        }
+
+        if ($leaveRequest->status !== 'pending') {
+            throw new \Exception('Leave request has already been processed');
+        }
+
+        $leaveRequest->status = $data['status'];
+        $leaveRequest->admin_note = $data['admin_note'] ?? null;
+        $leaveRequest->approved_by = $admin->id;
+        $leaveRequest->approved_at = now();
+
+        if ($data['status'] === 'approved') {
+            $employee = $leaveRequest->employee;
+            if ($employee->leave_quota < $leaveRequest->total_days) {
+                throw new \Exception('Employee does not have sufficient leave quota');
+            }
+            $employee->leave_quota -= $leaveRequest->total_days;
+            $employee->save();
+        }
+
+        $leaveRequest->save();
+        $leaveRequest->refresh();
+
+        return $leaveRequest;
+    }
 }
