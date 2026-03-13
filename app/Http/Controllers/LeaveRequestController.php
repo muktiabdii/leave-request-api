@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Helper\ApiResponse;
 use App\Services\LeaveRequestService;
 use App\Http\Resources\LeaveRequestResource;
@@ -134,10 +135,12 @@ class LeaveRequestController extends Controller
         }
     }
 
-    public function indexAdmin()
+    public function indexAdmin(Request $request)
     {
         try {
-            $leaveRequests = $this->leaveRequestService->getAllLeaveRequests();
+            $filters = $request->only(['status', 'employee_id', 'start_date', 'end_date', 'sort', 'order']);
+
+            $leaveRequests = $this->leaveRequestService->getAllLeaveRequests($filters);
 
             $meta = [
                 'page' => $leaveRequests->currentPage(),

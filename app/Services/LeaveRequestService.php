@@ -167,14 +167,33 @@ class LeaveRequestService
         return $leaveRequest;
     }
 
-    public function getAllLeaveRequests()
+    public function getAllLeaveRequests(array $filters = [])
     {
-        return LeaveRequest::with('employee')
+        $query = LeaveRequest::with('employee')
             ->whereHas('employee', function ($query) {
                 $query->where('role', 'employee');
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            });
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['employee_id'])) {
+            $query->where('employee_id', $filters['employee_id']);
+        }
+
+        if (isset($filters['start_date'])) {
+            $query->where('start_date', '>=', $filters['start_date']);
+        }
+
+        if (isset($filters['end_date'])) {
+            $query->where('end_date', '<=', $filters['end_date']);
+        }
+
+        $sortBy = $filters['sort'] ?? 'created_at';
+        $order = $filters['order'] ?? 'desc';
+
+        return $query->orderBy($sortBy, $order)->paginate(10);
     }
 
     public function getLeaveRequestByIdForAdmin($id)
